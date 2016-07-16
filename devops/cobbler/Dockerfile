@@ -16,9 +16,11 @@ RUN apt-get install -y git make python debhelper python-cheetah \
     python-yaml git-core apache2 libapache2-mod-python libapache2-mod-wsgi \
     python-support python-netaddr python-simplejson python-urlgrabber \
     python-django debmirror syslinux wget rsync curl genisoimage  \
+    dnsmasq \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root
+
 #COPY cobbler/ /root/cobbler/
 RUN git clone https://github.com/cobbler/cobbler.git
 
@@ -34,8 +36,7 @@ RUN PASSWORD=`openssl passwd -1 -salt hLGoLIZR $ROOT_PASSWORD` \
 RUN sed -i "s/^server: 127.0.0.1/server: $SERVER/g" /etc/cobbler/settings  \
     && sed -i "s/^next_server: 127.0.0.1/next_server: $SERVER/g" /etc/cobbler/settings
 
-RUN grep --color=auto -n "^default_password" /etc/cobbler/settings
-RUN grep --color=auto -n "^server:" /etc/cobbler/settings
+RUN sed --in-place "s/^SECRET_KEY = .*/SECRET_KEY = '${SECRET}'/"
 
 RUN mkdir /tftpboot
 
@@ -54,4 +55,3 @@ EXPOSE 67/udp
 EXPOSE 69/udp
 EXPOSE 80
 EXPOSE 443
-
