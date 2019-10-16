@@ -8,7 +8,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=nextcloud
+      - MYSQL_ROOT_PASSWORD=wentionx93
     env_file:
       - db.env
 
@@ -17,7 +17,7 @@ services:
     restart: always
 
   app:
-    image: nextcloud:fpm-alpine
+    image: nextcloud:fpm
     restart: always
     volumes:
       - nextcloud:/var/www/html
@@ -41,7 +41,7 @@ services:
       - app
 
   cron:
-    image: nextcloud:fpm-alpine
+    image: nextcloud:fpm
     restart: always
     volumes:
       - nextcloud:/var/www/html
